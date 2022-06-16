@@ -10,6 +10,13 @@ import Combine
 
 class HomeViewModel: ObservableObject {
     
+    @Published var statistic: [Statistic] = [
+        Statistic(title: "Title", value: "Value", percentageChange: 1),
+        Statistic(title: "Title", value: "Value"),
+        Statistic(title: "Title", value: "Value"),
+        Statistic(title: "Title", value: "Value", percentageChange: -7)
+        ]
+    
     @Published var allCoins: [Coin] = []
     @Published var portfolioCoins: [Coin] = []
     
@@ -37,7 +44,6 @@ class HomeViewModel: ObservableObject {
                            coin.symbol.lowercased().contains(lowercasedText) ||
                            coin.id.lowercased().contains(lowercasedText)
                 }
-                
             }
             .sink { [weak self] returnedCoins in
                 self?.allCoins = returnedCoins
