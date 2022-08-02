@@ -35,8 +35,14 @@ struct HomeView: View {
                     allCoinsView
                         .transition(.move(edge: .trailing))
                 } else {
-                    portfolioCoinsView
-                        .transition(.move(edge: .leading))
+                    ZStack(alignment: .top) {
+                        if vm.portfolioCoins.isEmpty && vm.searchingText.isEmpty {
+                            portfolioEmptyText
+                        } else {
+                            portfolioCoinsView
+                        }
+                    }
+                    .transition(.move(edge: .leading))
                 }
                 Spacer(minLength: 0)
             }
@@ -48,7 +54,7 @@ struct HomeView: View {
             NavigationLink(isActive: $showDetailView,
                            destination: { DetailLoadingView(coin: $selectedCoin) },
                            label: { EmptyView() })
-            )
+        )
     }
 }
 
@@ -124,6 +130,15 @@ extension HomeView {
         .listStyle(PlainListStyle())
     }
     
+    private var portfolioEmptyText: some View {
+        Text("You haven't added any coins to your portfolio yet! Click the + button to get started! 🥸")
+            .font(.callout)
+            .foregroundColor(Color.theme.accent)
+            .fontWeight(.medium)
+            .multilineTextAlignment(.center)
+            .padding(50)
+    }
+    
     private func segue(coin: Coin) {
         selectedCoin = coin
         showDetailView.toggle()
@@ -182,7 +197,7 @@ extension HomeView {
                 Image(systemName: "goforward")
             }
             .rotationEffect(Angle(degrees: vm.isLoading ? 360 : 0), anchor: .center)
-
+            
         }
         .font(.caption)
         .foregroundColor(Color.theme.secondaryText)
